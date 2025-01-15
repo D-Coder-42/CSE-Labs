@@ -1,0 +1,25 @@
+	AREA	RESET, DATA, READONLY
+	EXPORT __Vectors
+__Vectors
+	DCD	0x10001000  ;SP
+	DCD	Reset_Handler
+
+	AREA	storegpr, CODE, READONLY
+	ENTRY
+	EXPORT Reset_Handler
+Reset_Handler
+	LDR		R0, =SRC
+	LDR		R1,[R0]
+	MOV		R2, #0x02
+	MOV32	R3, #0x11223344
+	MOVT	R4, #0x5678
+	LDR		R5, =0xAABBCCDD
+	LDR		R6, [R0, R2, LSL #1]
+STOP
+	B	STOP
+	
+	AREA	srcdata, DATA, READONLY
+SRC
+	DCD	0x12345678
+	DCD	0x89ABCDEF
+	END
