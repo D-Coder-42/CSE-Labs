@@ -52,3 +52,10 @@ select TO_CHAR(DOB,'DD-MON-YY')
 from EMPLOYEE;
 select TO_CHAR(DOB,'DD-MM-YY')
 from EMPLOYEE;
+
+select TO_CHAR(DOB,'YEAR')
+from EMPLOYEE;
+select TO_CHAR(DOB,'Year')
+from EMPLOYEE;
+select TO_CHAR(DOB,'year')
+from EMPLOYEE;
