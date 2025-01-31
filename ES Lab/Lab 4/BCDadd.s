@@ -1,67 +1,61 @@
-; This program is incorrect
-; 1. carry propogation is incorrect
-; 2. the result is unpacked (can be easily fixed)
-
 	AREA	RESET, DATA, READONLY
 	EXPORT __Vectors
 __Vectors
 	DCD	0x10001000
-	DCD	Reset_Handler
+	DCD Reset_Handler
 	
-	AREA	BCDadd, CODE, READONLY
+	AREA	selsort, CODE, READONLY
 	ENTRY
-	EXPORT	Reset_Handler
+	EXPORT Reset_Handler
 Reset_Handler
-	LDR		R0, =BCD1
-	LDR		R1, =BCD2
-	LDR		R2, =RESULT
-	MOV		R3, #4
-	MOV		R4, #0
-
+	MOV		R4, #0x08
+	LDR		R0, =NUM1
+	LDR		R1, =NUM2
+	LDR		R9, =DEST
+	LDR		R2, [R0]
+	LDR		R3, [R1]
+	MOV		R5, #0x00
 LOOP
-	LDRB	R5, [R0], #1
-	LDRB	R6, [R1], #1
-	AND		R7, R5, #0x0F
-	AND		R8, R6, #0x0F
-	ADD		R9, R7, R8
-	ADD		R9, R9, R4
-	CMP		R9, #0x0A
-	BLO		STORE_LOW
-	ADD		R9, R9, #0x06
-	MOVLO	R4, #0
-	MOVHS	R4, #1
-
-STORE_LOW
-	STRB	R9, [R2], #1
-
-	AND		R7, R5, #0xF0
-	MOV		R7, R7, LSR #4
-	AND		R8, R6, #0xF0
-	MOV		R8, R8, LSR #4
-	ADD		R9, R7, R8
-	ADD		R9, R9, R4
-	CMP		R9, #0x0A
-	BLO		STORE_UP
-	ADD		R9, R9, #0x06
-	MOVLO	R4, #0
-	MOVHS   R4, #1
-
-STORE_UP
-	STRB	R9, [R2], #1
-
-	SUBS	R3, R3, #1
-	BNE     LOOP
-
+	AND		R6, R2, #0x0F
+	AND		R7, R3, #0x0F
+	ADD		R8, R6, R7
+	ADD		R8, R5
+	CMP		R8, #0x09
+	SUBHI	R8, #0x0A
+	MOVHI	R5, #0x01
+	MOVLS	R5, #0x00
+	STRB	R8, [R9], #1
+	LSR		R2, #0x04
+	LSR		R3, #0x04
+	SUBS	R4, #0x01	
+	BNE		LOOP
+	STRB	R5, [R9]
+	
+	MOV		R4, #5
+	LDR		R0, =DEST
+	LDR		R3, =PACK
+UP
+	LDRB	R1, [R0], #1
+	LDRB	R2, [R0], #1
+	LSL		R2, #4
+	ORR		R1, R2
+	STRB	R1, [R3], #1
+	SUBS	R4, #1
+	BNE		UP
+	
 STOP
-	B 	 STOP
+	B		STOP
 	ALIGN
+		
+NUM1
+	DCD		0x87654321
+NUM2
+	DCD		0x98765432
 
-BCD1 
-	DCD 0x12335679
-BCD2 
-	DCD 0x87654321
-
-	AREA store, DATA, READWRITE 
-RESULT 
-	DCD 0x00
+	AREA	destdata, DATA, READWRITE
+DEST
+	SPACE	0x09
+	ALIGN
+PACK
+	DCD		0x05
 	END
