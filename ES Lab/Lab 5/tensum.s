@@ -4,17 +4,13 @@ __Vectors
 	DCD	0x10001000	;SP
 	DCD Reset_Handler
 
-	AREA	gcdlcm, CODE, READONLY
+	AREA	tenadd, CODE, READONLY
 	ENTRY
 	EXPORT Reset_Handler
 Reset_Handler
 	LDR		R0, =ARR
-	LDR		R1, [R0], #4
 	MOV		R2, #0x0A
 	MOV		R4, #0x00
-	ADDS	R3, R1
-	ADC		R4, #0
-	SUB		R2, #1
 LOOP
 	LDR		R1, [R0], #4
 	ADDS	R3, R1

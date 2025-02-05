@@ -4,7 +4,7 @@ __Vectors
 	DCD	0x10001000
 	DCD Reset_Handler
 	
-	AREA	selsort, CODE, READONLY
+	AREA	bcdadd, CODE, READONLY
 	ENTRY
 	EXPORT Reset_Handler
 Reset_Handler
