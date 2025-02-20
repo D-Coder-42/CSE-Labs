@@ -1,0 +1,103 @@
+-- 1.
+select BDATE, ADDRESS
+from EMPLOYEE
+where FNAME = 'John' and MINIT = 'B' and LNAME = 'Smith';
+
+select FNAME || ' ' || MINIT || '. ' || LNAME as NAME, ADDRESS
+from EMPLOYEE join DEPARTMENT
+on EMPLOYEE.DNO = DEPARTMENT.DNUMBER
+where DNAME = 'Research';
+
+-- 2.
+select PNUMBER, DNUM, LNAME, ADDRESS, BDATE
+from PROJECT join DEPARTMENT
+on PROJECT.DNUM = DEPARTMENT.DNUMBER
+join EMPLOYEE
+on DEPARTMENT.MGR_SSN = EMPLOYEE.SSN
+where PLOCATION = 'Houston';
+
+-- 3.
+select E.FNAME as EMP_FNAME, E.LNAME as EMP_LNAME, S.FNAME as SUPER_FNAME, S.LNAME as SUPER_LNAME
+from EMPLOYEE E join EMPLOYEE S
+on E.SUPER_SSN = S.SSN;
+
+-- 4.
+select PNUMBER
+from PROJECT join WORKS_ON
+on PROJECT.PNUMBER = WORKS_ON.PNO
+join DEPARTMENT
+on PROJECT.DNUM = DEPARTMENT.DNUMBER
+join EMPLOYEE
+on WORKS_ON.ESSN = EMPLOYEE.SSN or DEPARTMENT.MGR_SSN = EMPLOYEE.SSN
+where LNAME = 'Smith';
+
+-- 5.
+select SALARY*1.10 as UPDATED_SAL
+from EMPLOYEE join WORKS_ON
+on EMPLOYEE.SSN = WORKS_ON.ESSN
+join PROJECT
+on PROJECT.PNUMBER = WORKS_ON.PNO
+where PNAME = 'ProductX';
+
+-- 6.
+select FNAME || ' ' || MINIT || '. ' || LNAME as NAME, SSN, PNAME, PNO
+from EMPLOYEE join WORKS_ON
+on EMPLOYEE.SSN = WORKS_ON.ESSN
+join PROJECT
+on WORKS_ON.PNO = PROJECT.PNUMBER
+join DEPARTMENT
+on EMPLOYEE.DNO = DEPARTMENT.DNUMBER
+order by DEPARTMENT.DNAME, LNAME, FNAME;
+
+-- 7.
+select FNAME || ' ' || MINIT || '. ' || LNAME as NAME
+from EMPLOYEE join DEPENDENT
+on DEPENDENT.ESSN = EMPLOYEE.SSN
+where DEPENDENT_NAME = FNAME
+and DEPENDENT.SEX = EMPLOYEE.SEX;
+
+-- 8.
+select FNAME || ' ' || MINIT || '. ' || LNAME as NAME
+from EMPLOYEE left join DEPENDENT
+on DEPENDENT.ESSN = EMPLOYEE.SSN
+where DEPENDENT_NAME is NULL;
+
+-- 9.
+select distinct FNAME || ' ' || MINIT || '. ' || LNAME as NAME
+from EMPLOYEE join DEPENDENT
+on DEPENDENT.ESSN = EMPLOYEE.SSN
+and EMPLOYEE.SSN in (
+	select MGR_SSN
+	from DEPARTMENT
+);
+
+-- 10.
+select sum(SALARY), max(SALARY), min(SALARY), avg(SALARY)
+from EMPLOYEE;
+
+-- 11.
+create view PRO_DET as 
+select PNUMBER as PNUM,  count(ESSN) as EMP_COUNT
+from PROJECT join WORKS_ON
+on PROJECT.PNUMBER = WORKS_ON.PNO
+group by PNUMBER;
+
+select PNUM, PNAME, EMP_COUNT
+from PROJECT join PRO_DET
+on PROJECT.PNUMBER = PRO_DET.PNUM
+order by PNUM;
+
+-- 12.
+-- use PRO_DET created in 11
+select PNUM, PNAME, EMP_COUNT
+from PROJECT join PRO_DET
+on PROJECT.PNUMBER = PRO_DET.PNUM
+where EMP_COUNT > 2
+order by PNUM;
+
+-- 13.
+select DNO, count(SSN)
+from EMPLOYEE
+where SALARY > 25000
+group by DNO
+having count(SSN) > 2;
