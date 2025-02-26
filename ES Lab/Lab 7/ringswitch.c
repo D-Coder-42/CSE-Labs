@@ -16,7 +16,7 @@ int main (){
 
 	while(1) {
 		sw_pin = (LPC_GPIO0->FIOPIN & (1 << 21)) >> 21;
-		if (sw_pin == 1) {
+		if (sw_pin == 0) {
 			curr = (LPC_GPIO0->FIOPIN & (0xFF<<4)) >> 4;
 			msb = curr >> 7;
 			curr = ((curr << 1) & 0xFF) | msb;
