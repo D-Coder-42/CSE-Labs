@@ -3,7 +3,9 @@
 unsigned int digits[16] = {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F, 0x77, 0x7C, 0x39, 0x5E, 0x79, 0x71};
 unsigned int i,j,count;
 
-void displaySSD(int);
+void displaySSD (int);
+void initTimer (void);
+void delayMilliS (int);
 
 int main () {
 	SystemInit();
@@ -21,7 +23,7 @@ int main () {
 		displaySSD(count--);
 		if (count == 0) count = 9999;
 		
-		for (j = 0; j<40000; j++);
+		delayMilliS(1000);
 	}
 }
 
@@ -37,7 +39,21 @@ void displaySSD (int num) {
 		LPC_GPIO1->FIOPIN |= (i << 23);
 		LPC_GPIO0->FIOPIN &= ~(0xFF << 4);
 		LPC_GPIO0->FIOPIN |= digits[3-i] << 4;
-			
-		for (j = 0; j<10000; j++);
 	}
+}
+
+void initTimer () {
+	LPC_TIM0->CTCR = 0x00;
+    LPC_TIM0->TCR = 0x02;
+    LPC_TIM0->PR = 2999;		// Prescaler for 1 ms
+
+	return;
+}
+
+void delayMilliS (int delay) {
+	initTimer();
+	LPC_TIM0->TCR = 0x01;
+	while (LPC_TIM0->TC < delay);
+	
+	return;
 }

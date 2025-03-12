@@ -6,7 +6,9 @@ void clearPorts (void);
 void writeLCD (int, int);
 void comDataLCD (int, int);
 void displayLCD (char*);
+void initTimer (void);
 void delayMicroS (int);
+void delayMilliS (int);
 
 // Variable Declarations
 int low, high;
@@ -86,11 +88,24 @@ void clearPorts () {
 	return;
 }
 
+void initTimer () {
+	LPC_TIM0->CTCR = 0x00;
+    LPC_TIM0->TCR = 0x02;
+    LPC_TIM0->PR = 2;		// Prescaler for 1 us
+
+	return;
+}
+
 void delayMicroS (int delay) {
-	// implement delay using TIMERS
-	int j;
-	for (j = 0; j < (100 * delay); j++);
+	initTimer();
+	LPC_TIM0->TCR = 0x01;
+	while (LPC_TIM0->TC < delay);
 	
+	return;
+}
+
+void delayMilliS (int delay) {
+	while (delay--)	delayMicroS(1000);
 	return;
 }
 

@@ -19,8 +19,6 @@ int main () {
 			LPC_GPIO1->FIOPIN |= (i << 23);
 			LPC_GPIO0->FIOPIN &= ~(0xFF << 4);
 			LPC_GPIO0->FIOPIN |= digits[3-i] << 4;
-			
-			for (j = 0; j<10000; j++);
 		}
 	}
 }
