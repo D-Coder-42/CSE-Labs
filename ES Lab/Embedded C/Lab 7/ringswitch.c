@@ -1,7 +1,7 @@
 #include <lpc17xx.h>
 
 unsigned int curr, msb, i, sw_pin;
-unsigned int start = 1;
+unsigned int LED = 1;
 
 int main (){
 	
@@ -9,7 +9,10 @@ int main (){
 	SystemCoreClockUpdate();
 	
 	LPC_PINCON->PINSEL0 &= ~(0xFFFF<<8);
+	LPC_PINCON->PINSEL1 &= ~(0x03<<10);
+
 	LPC_GPIO0->FIODIR |= (0xFF<<4);
+	LPC_GPIO0->FIODIR &= ~(0x1<<21);
 	
 	LPC_GPIO0->FIOCLR |= (0xFF<<4);
 	LPC_GPIO0->FIOSET |= (0x01<<4);
@@ -23,7 +26,14 @@ int main (){
 		
 			LPC_GPIO0->FIOCLR |= (0xFF<<4);
 			LPC_GPIO0->FIOSET |= (curr<<4);
-		
+
+			// Another possible logic
+			// LPC_GPIO0->FIOCLR |= (0xFF<<4);
+			// LPC_GPIO0->FIOSET |= (LED<<4);
+
+			// LED <<= 1;
+			// if (LED >= 1 << 9)	LED = 1;
+
 			for(i = 0; i < 30000; i++);
 		}
 	}
