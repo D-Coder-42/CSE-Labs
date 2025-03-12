@@ -1,4 +1,6 @@
 #include <lpc17xx.h>
+#include <stdlib.h>
+#include <string.h>
 
 // Function Definitions
 void initLCD (void);
@@ -10,11 +12,15 @@ void initTimer (void);
 void delayMicroS (int);
 
 int main () {
-	char line1[] = "MIT - ";
-	char line2[] = "Department of CSE";
+	char message[] = "Dice Output:";
+	int sw_pin, dice;
+	char out[17];
 	
 	SystemInit();
 	SystemCoreClockUpdate();
+	
+	LPC_PINCON->PINSEL1 &= ~(0x03 << 10);
+	LPC_GPIO0->FIODIR &= ~(1 << 21);
 	
 	initTimer();
 	initLCD();
@@ -22,10 +28,23 @@ int main () {
 	comDataLCD (0x80,0);
 	delayMicroS(1520);
 	
-	displayLCD(line1);
-	displayLCD(line2);
+	displayLCD(message);
 	
-	return 0;
+	while (1) {
+		sw_pin = (LPC_GPIO0->FIOPIN & (1<<21)) >> 21;
+		if (sw_pin == 0) {
+			comDataLCD (0xC0,0);
+			delayMicroS(1520);
+			
+			dice = rand()%6 + 1;
+			strcpy(out, (char*)dice);
+			strcat(out, "    ");
+			dice = rand()%6 + 1;
+			strcat(out, (char*)dice);
+			
+			displayLCD(out);
+		}
+	}
 }
 
 void initLCD () {
@@ -33,7 +52,7 @@ void initLCD () {
 	LPC_GPIO0->FIODIR |= (0x3F << 23);
 	
 	clearPorts();
-	delayMicroS(3200);
+	delayMicroS(1520);
 	
 	comDataLCD(0x33,0);
 	delayMicroS(1520);
@@ -67,7 +86,7 @@ void comDataLCD (int data, int type) {
 
 void writeLCD (int nibble, int type) {
 	clearPorts();
-	LPC_GPIO0->FIOPIN |= nibble;
+	LPC_GPIO0->FIOSET = nibble;
 	if (type)	LPC_GPIO0->FIOSET = 1 << 27;
 	else			LPC_GPIO0->FIOCLR = 1 << 27;
 	
@@ -87,8 +106,7 @@ void clearPorts () {
 }
 
 void displayLCD (char* message) {
-	int i = 0;
-	int c;
+	int i = 0, c;
 	
 	while (message[i] != '\0') {
 		c = message[i];
