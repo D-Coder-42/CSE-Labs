@@ -1,5 +1,183 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+#define CAPACITY 20
+
+// Structure to hold key-value pair where both are strings
+struct HashNode {
+    char *key;
+    char *value;
+};
+
+int size = 0; // Current size of the hash table
+int key_comparisons = 0;  // Number of key comparisons during searches
+
+struct HashNode** arr;  // The hash table (array of pointers to HashNode)
+struct HashNode* dummy;  // A dummy node used for deleted slots
+
+// Simple hash function for strings
+int hash(char *key) {
+    int h = 0;
+    while (*key) {
+        h = (h * 31 + *key++) % CAPACITY;
+    }
+    return h;
+}
+
+// Insert function: Inserts key-value pair into the hash table
+void insert(char *key, char *value) {
+    struct HashNode* temp = (struct HashNode*)malloc(sizeof(struct HashNode));
+    temp->key = strdup(key);  // Copy the key
+    temp->value = strdup(value);  // Copy the value
+
+    int hashIndex = hash(key);
+
+    // Open addressing using linear probing to resolve collisions
+    while (arr[hashIndex] != NULL) {
+        if (strcmp(arr[hashIndex]->key, key) == 0) {
+            int ch;
+            // Key already exists, ask the user if they want to update the value
+            printf("Key '%s' already exists. Insertion failed. Do you want to update the value?\nEnter choice (1 for Yes, 0 for No): ", key);
+            scanf("%d", &ch);
+            if (ch == 1) {
+                free(arr[hashIndex]->value);  // Free the old value
+                arr[hashIndex]->value = strdup(value);  // Update the value
+                printf("Key-Value pair updated\n");
+            } else {
+                printf("Key-Value pair not updated\n");
+            }
+            free(temp->key);
+            free(temp->value);
+            free(temp);
+            return;
+        }
+        hashIndex++;
+        hashIndex %= CAPACITY;  // Wrap around if index exceeds capacity
+    }
+
+    // If the spot is available (either NULL or dummy), insert the new node
+    arr[hashIndex] = temp;
+    size++;
+    printf("Key '%s' inserted successfully.\n", key);
+}
+
+// Delete function: Deletes the key-value pair from the hash table
+int delete(char *key) {
+    int hashIndex = hash(key);
+
+    while (arr[hashIndex] != NULL) {
+        if (strcmp(arr[hashIndex]->key, key) == 0) {
+            free(arr[hashIndex]->key);  // Free the key
+            free(arr[hashIndex]->value);  // Free the value
+            free(arr[hashIndex]);  // Free the node
+            arr[hashIndex] = dummy;  // Mark the position as deleted
+            size--;
+            return 1;
+        }
+        hashIndex++;
+        hashIndex %= CAPACITY;  // Wrap around if index exceeds capacity
+    }
+
+    return 0;
+}
+
+// Find function: Searches for the key in the hash table
+char* find(char *key) {
+    int hashIndex = hash(key);
+    key_comparisons = 0;  // Reset key comparisons every time we search
+
+    while (arr[hashIndex] != NULL) {
+        key_comparisons++;  // Increment key comparisons only during the search
+        if (strcmp(arr[hashIndex]->key, key) == 0)
+            return arr[hashIndex]->value;
+
+        hashIndex++;
+        hashIndex %= CAPACITY;  // Wrap around if index exceeds capacity
+    }
+
+    return NULL;
+}
+
+// Display Menu function: Displays the menu options for the user
+void displayMenu() {
+    printf("\nMenu:\n");
+    printf("1. Insert key-value pair\n");
+    printf("2. Delete key-value pair\n");
+    printf("3. Search by key\n");
+    printf("0. Exit\n");
+}
+
+int main() {
+    arr = (struct HashNode**)malloc(sizeof(struct HashNode*) * CAPACITY);
+    for (int i = 0; i < CAPACITY; i++)
+        arr[i] = NULL;
+
+    dummy = (struct HashNode*)malloc(sizeof(struct HashNode));
+    dummy->key = NULL;
+    dummy->value = NULL;
+
+    int choice;
+    char key[100], value[100];
+
+    do {
+        displayMenu();
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        getchar();  // Clear the buffer for string inputs
+
+        switch (choice) {
+            case 1:
+                printf("Enter key: ");
+                fgets(key, sizeof(key), stdin);
+                key[strcspn(key, "\n")] = 0;  // Remove the trailing newline
+                printf("Enter value: ");
+                fgets(value, sizeof(value), stdin);
+                value[strcspn(value, "\n")] = 0;  // Remove the trailing newline
+                insert(key, value);
+                break;
+
+            case 2:
+                printf("Enter key to delete: ");
+                fgets(key, sizeof(key), stdin);
+                key[strcspn(key, "\n")] = 0;
+                if (delete(key))
+                    printf("Node with key '%s' deleted successfully.\n", key);
+                else
+                    printf("Key '%s' does not exist.\n", key);
+                break;
+
+            case 3:
+                printf("Enter key to find: ");
+                fgets(key, sizeof(key), stdin);
+                key[strcspn(key, "\n")] = 0;
+                char *result = find(key);
+                if (result != NULL)
+                    printf("Value of key '%s' is '%s'\n", key, result);
+                else
+                    printf("Key '%s' does not exist.\n", key);
+                printf("Number of key comparisons during search: %d\n", key_comparisons);  // Output the key comparisons for the search
+                break;
+
+            case 0:
+                printf("Exiting...\n");
+                exit(0);
+
+            default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    } while (1);
+
+    return 0;
+}
+
+///////////////////////////////
+///// INT KEY-PAIR VALUES /////
+///////////////////////////////
+
+/*
+#include <stdio.h>
+#include <stdlib.h>
 
 struct HashNode {
     int key;
@@ -8,10 +186,12 @@ struct HashNode {
 
 const int capacity = 20;
 int size = 0;
+int key_comparisons = 0;  // Variable to keep track of the key comparisons for searches only
 
 struct HashNode** arr;
 struct HashNode* dummy;
 
+// Insert function: Inserts key-value pair into the hash table using open addressing with linear probing
 void insert(int key, int V)
 {
     struct HashNode* temp = (struct HashNode*)malloc(sizeof(struct HashNode));
@@ -20,55 +200,73 @@ void insert(int key, int V)
 
     int hashIndex = key % capacity;
 
-    while (arr[hashIndex] != NULL && arr[hashIndex]->key != key && arr[hashIndex]->key != -1) {
+    // Open addressing using linear probing to resolve collisions
+    while (arr[hashIndex] != NULL) {
+        if (arr[hashIndex]->key == key) {
+            int ch;
+            // Key already exists, do not allow insertion
+            printf("Key %d already exists. Insertion failed. Do you want to update key?\nEnter choice (1 for Yes, 0 for No): ", key);
+            scanf("%d", &ch);
+            if (ch == 1) {
+                arr[hashIndex]->value = V;
+                printf("Key-Value pair updated\n");
+            } else
+                printf("Key-Value pair not updated\n");
+            free(temp);  // Free the temporary node
+            return;
+        }
         hashIndex++;
-        hashIndex %= capacity;
+        hashIndex %= capacity;  // Wrap around if index exceeds capacity
     }
 
-    if (arr[hashIndex] == NULL || arr[hashIndex]->key == -1)
-        size++;
-
+    // If the spot is available (either NULL or dummy), insert the new node
     arr[hashIndex] = temp;
+    size++;
+    printf("Key %d inserted successfully.\n", key);
 }
 
+// Delete function: Deletes the key-value pair from the hash table
 int delete(int key)
 {
     int hashIndex = key % capacity;
 
     while (arr[hashIndex] != NULL) {
         if (arr[hashIndex]->key == key) {
-            arr[hashIndex] = dummy;
+            arr[hashIndex] = dummy;  // Mark the position as deleted
             size--;
             return 1;
         }
         hashIndex++;
-        hashIndex %= capacity;
+        hashIndex %= capacity;  // Wrap around if index exceeds capacity
     }
 
     return 0;
 }
 
+// Find function: Searches for the key in the hash table
 int find(int key)
 {
-    int hashIndex = (key % capacity);
+    int hashIndex = key % capacity;
+    key_comparisons = 0;  // Reset key comparisons every time we search
 
     while (arr[hashIndex] != NULL) {
+        key_comparisons++;  // Increment key comparisons only during the search
         if (arr[hashIndex]->key == key)
             return arr[hashIndex]->value;
 
         hashIndex++;
-        hashIndex %= capacity;
+        hashIndex %= capacity;  // Wrap around if index exceeds capacity
     }
 
     return -1;
 }
 
-void displayMenu()
-{
+// Display Menu function: Displays the menu options for the user
+void displayMenu() {
     printf("\nMenu:\n");
-    printf("1. Insert\n");
-    printf("2. Delete\n");
-    printf("3. Find\n");
+    printf("1. Insert key-value pair\n");
+    printf("2. Delete key-value pair\n");
+    printf("3. Search by key\n");
     printf("0. Exit\n");
 }
 
@@ -96,7 +294,6 @@ int main()
                 printf("Enter value: ");
                 scanf("%d", &value);
                 insert(key, value);
-                printf("Key %d inserted successfully.\n", key);
                 break;
 
             case 2:
@@ -116,6 +313,7 @@ int main()
                     printf("Value of key %d is %d\n", key, value);
                 else
                     printf("Key %d does not exist.\n", key);
+                printf("Number of key comparisons during search: %d\n", key_comparisons);  // Output the key comparisons for the search
                 break;
 
             case 0:
@@ -128,70 +326,5 @@ int main()
     } while (1);
 
     return 0;
-}
-
-///////////////////////////////////////////////////////
-///// SHORTENED CODE (WITH STRING KEY-VALUE PAIR) /////
-///////////////////////////////////////////////////////
-
-/*
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#define CAP 20
-
-typedef struct { char *k,*v; } Node;
-Node **t, *d;  // Table and dummy
-int s=0;       // Size
-
-int hash(char *k) {
-    int h=0; while(*k) h=(h*31 + *k++)%CAP;
-    return h;
-}
-
-void ins(char *k, char *v) {
-    Node *n=malloc(sizeof(*n));
-    n->k=strdup(k); n->v=strdup(v);
-    int i=hash(k);
-    for(;t[i]&&t[i]!=d&&strcmp(t[i]->k,k);i=(i+1)%CAP);
-    if(!t[i]||t[i]==d) s++;
-    t[i]=n;
-}
-
-int del(char *k) {
-    for(int i=hash(k);t[i];i=(i+1)%CAP)
-        if(t[i]!=d && !strcmp(t[i]->k,k)) {
-            free(t[i]->k); free(t[i]->v); free(t[i]);
-            t[i]=d; s--; return 1;
-        }
-    return 0;
-}
-
-char* find(char *k) {
-    for(int i=hash(k);t[i];i=(i+1)%CAP)
-        if(t[i]!=d && !strcmp(t[i]->k,k)) return t[i]->v;
-    return "Not found";
-}
-
-int main() {
-    t=calloc(CAP,sizeof(*t));
-    d=malloc(sizeof(*d)); *d=(Node){0};
-    
-    int c; char k[100],v[100];
-    while(1) {
-        printf("\n1.Ins\n2.Del\n3.Find\n0.Exit\nChoice: ");
-        scanf("%d%*c",&c); if(!c) break;
-        
-        printf("Key: "); fgets(k,100,stdin);
-        k[strcspn(k,"\n")]=0;
-        
-        if(c==1) {
-            printf("Val: "); fgets(v,100,stdin);
-            v[strcspn(v,"\n")]=0;
-            ins(k,v); printf("Added\n");
-        }
-        else if(c==2) printf(del(k)?"Deleted\n":"Missing\n");
-        else if(c==3) printf("Value: %s\n",find(k));
-    }
 }
 */

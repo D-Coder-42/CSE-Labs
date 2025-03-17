@@ -2,55 +2,65 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct node {
+// Define 'node' using typedef
+typedef struct node {
     char* key;
     char* value;
     struct node* next;
-};
+} Node;
 
-void setNode(struct node* node, char* key, char* value)
+// Define 'hashMap' using typedef
+typedef struct hashMap {
+    int numOfElements, capacity;
+    Node** arr;
+} HashMap;
+
+int key_comparisons = 0;  // Global variable to track the number of key comparisons during search
+
+// Function to set node fields
+void setNode(Node* node, char* key, char* value)
 {
-    node->key = key;
-    node->value = value;
+    node->key = strdup(key);  // Duplicate the key string
+    node->value = strdup(value);  // Duplicate the value string
     node->next = NULL;
 }
 
-struct hashMap {
-    int numOfElements, capacity;
-    struct node** arr;
-};
-
-void initializeHashMap(struct hashMap* mp)
+// Function to initialize the hash map
+void initializeHashMap(HashMap* mp)
 {
     mp->capacity = 100;
     mp->numOfElements = 0;
-    mp->arr = (struct node**)malloc(sizeof(struct node*) * mp->capacity);
+    mp->arr = (Node**)malloc(sizeof(Node*) * mp->capacity);
+    for (int i = 0; i < mp->capacity; i++) {
+        mp->arr[i] = NULL;
+    }
 }
 
-int hashFunction(struct hashMap* mp, char* key)
+// Hash function to calculate index for key
+int hashFunction(HashMap* mp, char* key)
 {
-    int bucketIndex;
     int sum = 0, factor = 31;
     for (int i = 0; i < strlen(key); i++) {
-        sum = ((sum % mp->capacity) + (((int)key[i]) * factor) % mp->capacity) % mp->capacity;
-        factor = ((factor % __INT16_MAX__) * (31 % __INT16_MAX__)) % __INT16_MAX__;
+        sum = (sum * factor + key[i]) % mp->capacity;
     }
-    bucketIndex = sum;
-    return bucketIndex;
+    return sum % mp->capacity;
 }
 
-int insert(struct hashMap* mp, char* key, char* value)
+// Insert a key-value pair into the hash map
+int insert(HashMap* mp, char* key, char* value)
 {
     int bucketIndex = hashFunction(mp, key);
-    struct node* newNode = (struct node*)malloc(sizeof(struct node));
+    Node* newNode = (Node*)malloc(sizeof(Node));
     setNode(newNode, key, value);
 
-    struct node* currentNode = mp->arr[bucketIndex];
+    Node* currentNode = mp->arr[bucketIndex];
 
     while (currentNode != NULL) {
         if (strcmp(currentNode->key, key) == 0) {
+            free(newNode->key);
+            free(newNode->value);
             free(newNode);
-            return 0;
+            return 0;  // Key already exists, return 0
         }
         currentNode = currentNode->next;
     }
@@ -61,11 +71,12 @@ int insert(struct hashMap* mp, char* key, char* value)
     return 1;
 }
 
-int delete(struct hashMap* mp, char* key)
+// Delete a key-value pair from the hash map
+int delete(HashMap* mp, char* key)
 {
     int bucketIndex = hashFunction(mp, key);
-    struct node* prevNode = NULL;
-    struct node* currNode = mp->arr[bucketIndex];
+    Node* prevNode = NULL;
+    Node* currNode = mp->arr[bucketIndex];
 
     while (currNode != NULL) {
         if (strcmp(currNode->key, key) == 0) {
@@ -74,32 +85,40 @@ int delete(struct hashMap* mp, char* key)
             } else {
                 prevNode->next = currNode->next;
             }
+            free(currNode->key);
+            free(currNode->value);
             free(currNode);
             mp->numOfElements--;
-            return 1;
+            return 1;  // Key found and deleted
         }
         prevNode = currNode;
         currNode = currNode->next;
     }
 
-    return 0;
+    return 0;  // Key not found
 }
 
-char* search(struct hashMap* mp, char* key)
+// Search for a key in the hash map
+char* search(HashMap* mp, char* key)
 {
     int bucketIndex = hashFunction(mp, key);
-    struct node* bucketHead = mp->arr[bucketIndex];
+    Node* bucketHead = mp->arr[bucketIndex];
+
+    // Reset key_comparisons counter before starting the search
+    key_comparisons = 0;
+
     while (bucketHead != NULL) {
+        key_comparisons++;  // Increment the counter each time a comparison is made
         if (strcmp(bucketHead->key, key) == 0) {
             return bucketHead->value;
         }
         bucketHead = bucketHead->next;
     }
-    char* errorMssg = (char*)malloc(sizeof(char) * 25);
-    strcpy(errorMssg, "Oops! No data found.\n");
-    return errorMssg;
+
+    return "Oops! No data found.\n";  // Return error message if key is not found
 }
 
+// Display menu options
 void displayMenu() {
     printf("\nMenu:\n");
     printf("1. Insert key-value pair\n");
@@ -108,9 +127,10 @@ void displayMenu() {
     printf("0. Exit\n");
 }
 
+// Main function to run the menu-driven program
 int main()
 {
-    struct hashMap* mp = (struct hashMap*)malloc(sizeof(struct hashMap));
+    HashMap* mp = (HashMap*)malloc(sizeof(HashMap));
     initializeHashMap(mp);
 
     int choice;
@@ -120,16 +140,16 @@ int main()
         displayMenu();
         printf("Enter your choice: ");
         scanf("%d", &choice);
-        getchar();
+        getchar();  // Clear the newline from the input buffer
 
         switch (choice) {
         case 1:
             printf("Enter key: ");
             fgets(key, sizeof(key), stdin);
-            key[strcspn(key, "\n")] = '\0';
+            key[strcspn(key, "\n")] = '\0';  // Remove newline character
             printf("Enter value: ");
             fgets(value, sizeof(value), stdin);
-            value[strcspn(value, "\n")] = '\0';
+            value[strcspn(value, "\n")] = '\0';  // Remove newline character
             if (insert(mp, key, value)) {
                 printf("Key-value pair inserted!\n");
             } else {
@@ -139,13 +159,14 @@ int main()
         case 2:
             printf("Enter key to search: ");
             fgets(key, sizeof(key), stdin);
-            key[strcspn(key, "\n")] = '\0';
+            key[strcspn(key, "\n")] = '\0';  // Remove newline character
             printf("Value: %s\n", search(mp, key));
+            printf("Key comparisons made during search: %d\n", key_comparisons);  // Output the number of key comparisons
             break;
         case 3:
             printf("Enter key to delete: ");
             fgets(key, sizeof(key), stdin);
-            key[strcspn(key, "\n")] = '\0';
+            key[strcspn(key, "\n")] = '\0';  // Remove newline character
             if (delete(mp, key)) {
                 printf("Key-value pair deleted!\n");
             } else {
@@ -162,95 +183,3 @@ int main()
 
     return 0;
 }
-
-/////////////////////////////////////
-///// SHORTENED VERSION OF CODE /////
-/////////////////////////////////////
-
-/*
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#define CAP 100
-
-typedef struct Node {
-    char *k, *v;
-    struct Node *nxt;
-} Node;
-
-typedef struct {
-    int sz;
-    Node **arr;
-} HashMap;
-
-int hash(char *k) {
-    int h = 0;
-    for(; *k; k++) h = (h * 31 + *k) % CAP;
-    return h;
-}
-
-void init(HashMap *h) {
-    h->sz = 0;
-    h->arr = malloc(CAP * sizeof(Node*));
-}
-
-int insert(HashMap *h, char *k, char *v) {
-    int i = hash(k);
-    for(Node *n = h->arr[i]; n; n = n->nxt)
-        if(!strcmp(n->k, k)) return 0;
-    
-    Node *new = malloc(sizeof(Node));
-    new->k = k; new->v = v;
-    new->nxt = h->arr[i];
-    h->arr[i] = new;
-    h->sz++;
-    return 1;
-}
-
-int del(HashMap *h, char *k) {
-    Node *prv = NULL, *curr;
-    for(curr = h->arr[hash(k)]; curr; prv = curr, curr = curr->nxt) {
-        if(!strcmp(curr->k, k)) {
-            if(prv) prv->nxt = curr->nxt;
-            else h->arr[hash(k)] = curr->nxt;
-            free(curr);
-            h->sz--;
-            return 1;
-        }
-    }
-    return 0;
-}
-
-char* find(HashMap *h, char *k) {
-    for(Node *n = h->arr[hash(k)]; n; n = n->nxt)
-        if(!strcmp(n->k, k)) return n->v;
-    return "Not found";
-}
-
-int main() {
-    HashMap h;
-    init(&h);
-    int c;
-    char k[100], v[100];
-    
-    while(1) {
-        printf("\n1. Insert\n2. Find\n3. Del\n0. Exit\nChoice: ");
-        scanf("%d%*c", &c);
-        if(!c) break;
-        
-        printf("Key: ");
-        fgets(k, 100, stdin);
-        k[strcspn(k, "\n")] = 0;
-        
-        if(c == 1) {
-            printf("Val: ");
-            fgets(v, 100, stdin);
-            v[strcspn(v, "\n")] = 0;
-            printf(insert(&h, k, v) ? "Added\n" : "Exists\n");
-        }
-        else if(c == 2) printf("Val: %s\n", find(&h, k));
-        else if(c == 3) printf(del(&h, k) ? "Deleted\n" : "Missing\n");
-    }
-}
-*/
