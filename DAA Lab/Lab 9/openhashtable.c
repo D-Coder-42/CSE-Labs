@@ -162,3 +162,95 @@ int main()
 
     return 0;
 }
+
+/////////////////////////////////////
+///// SHORTENED VERSION OF CODE /////
+/////////////////////////////////////
+
+/*
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define CAP 100
+
+typedef struct Node {
+    char *k, *v;
+    struct Node *nxt;
+} Node;
+
+typedef struct {
+    int sz;
+    Node **arr;
+} HashMap;
+
+int hash(char *k) {
+    int h = 0;
+    for(; *k; k++) h = (h * 31 + *k) % CAP;
+    return h;
+}
+
+void init(HashMap *h) {
+    h->sz = 0;
+    h->arr = malloc(CAP * sizeof(Node*));
+}
+
+int insert(HashMap *h, char *k, char *v) {
+    int i = hash(k);
+    for(Node *n = h->arr[i]; n; n = n->nxt)
+        if(!strcmp(n->k, k)) return 0;
+    
+    Node *new = malloc(sizeof(Node));
+    new->k = k; new->v = v;
+    new->nxt = h->arr[i];
+    h->arr[i] = new;
+    h->sz++;
+    return 1;
+}
+
+int del(HashMap *h, char *k) {
+    Node *prv = NULL, *curr;
+    for(curr = h->arr[hash(k)]; curr; prv = curr, curr = curr->nxt) {
+        if(!strcmp(curr->k, k)) {
+            if(prv) prv->nxt = curr->nxt;
+            else h->arr[hash(k)] = curr->nxt;
+            free(curr);
+            h->sz--;
+            return 1;
+        }
+    }
+    return 0;
+}
+
+char* find(HashMap *h, char *k) {
+    for(Node *n = h->arr[hash(k)]; n; n = n->nxt)
+        if(!strcmp(n->k, k)) return n->v;
+    return "Not found";
+}
+
+int main() {
+    HashMap h;
+    init(&h);
+    int c;
+    char k[100], v[100];
+    
+    while(1) {
+        printf("\n1. Insert\n2. Find\n3. Del\n0. Exit\nChoice: ");
+        scanf("%d%*c", &c);
+        if(!c) break;
+        
+        printf("Key: ");
+        fgets(k, 100, stdin);
+        k[strcspn(k, "\n")] = 0;
+        
+        if(c == 1) {
+            printf("Val: ");
+            fgets(v, 100, stdin);
+            v[strcspn(v, "\n")] = 0;
+            printf(insert(&h, k, v) ? "Added\n" : "Exists\n");
+        }
+        else if(c == 2) printf("Val: %s\n", find(&h, k));
+        else if(c == 3) printf(del(&h, k) ? "Deleted\n" : "Missing\n");
+    }
+}
+*/
