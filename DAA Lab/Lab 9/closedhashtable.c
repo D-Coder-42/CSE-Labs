@@ -129,3 +129,69 @@ int main()
 
     return 0;
 }
+
+///////////////////////////////////////////////////////
+///// SHORTENED CODE (WITH STRING KEY-VALUE PAIR) /////
+///////////////////////////////////////////////////////
+
+/*
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define CAP 20
+
+typedef struct { char *k,*v; } Node;
+Node **t, *d;  // Table and dummy
+int s=0;       // Size
+
+int hash(char *k) {
+    int h=0; while(*k) h=(h*31 + *k++)%CAP;
+    return h;
+}
+
+void ins(char *k, char *v) {
+    Node *n=malloc(sizeof(*n));
+    n->k=strdup(k); n->v=strdup(v);
+    int i=hash(k);
+    for(;t[i]&&t[i]!=d&&strcmp(t[i]->k,k);i=(i+1)%CAP);
+    if(!t[i]||t[i]==d) s++;
+    t[i]=n;
+}
+
+int del(char *k) {
+    for(int i=hash(k);t[i];i=(i+1)%CAP)
+        if(t[i]!=d && !strcmp(t[i]->k,k)) {
+            free(t[i]->k); free(t[i]->v); free(t[i]);
+            t[i]=d; s--; return 1;
+        }
+    return 0;
+}
+
+char* find(char *k) {
+    for(int i=hash(k);t[i];i=(i+1)%CAP)
+        if(t[i]!=d && !strcmp(t[i]->k,k)) return t[i]->v;
+    return "Not found";
+}
+
+int main() {
+    t=calloc(CAP,sizeof(*t));
+    d=malloc(sizeof(*d)); *d=(Node){0};
+    
+    int c; char k[100],v[100];
+    while(1) {
+        printf("\n1.Ins\n2.Del\n3.Find\n0.Exit\nChoice: ");
+        scanf("%d%*c",&c); if(!c) break;
+        
+        printf("Key: "); fgets(k,100,stdin);
+        k[strcspn(k,"\n")]=0;
+        
+        if(c==1) {
+            printf("Val: "); fgets(v,100,stdin);
+            v[strcspn(v,"\n")]=0;
+            ins(k,v); printf("Added\n");
+        }
+        else if(c==2) printf(del(k)?"Deleted\n":"Missing\n");
+        else if(c==3) printf("Value: %s\n",find(k));
+    }
+}
+*/
