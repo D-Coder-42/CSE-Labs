@@ -11,7 +11,7 @@ void delayMicroS (int);
 
 int main () {
 	char line1[] = "MIT - ";
-	char line2[] = "Department of CSE";
+	char line2[] = "Dept. of CSE";
 	
 	SystemInit();
 	SystemCoreClockUpdate();
@@ -21,8 +21,10 @@ int main () {
 	
 	comDataLCD (0x80,0);
 	delayMicroS(1520);
-	
 	displayLCD(line1);
+	
+	comDataLCD (0xC0,0);
+	delayMicroS(1520);
 	displayLCD(line2);
 	
 	return 0;
@@ -33,21 +35,28 @@ void initLCD () {
 	LPC_GPIO0->FIODIR |= (0x3F << 23);
 	
 	clearPorts();
-	delayMicroS(3200);
+	delayMicroS(1520);
+	// delay(3200);
 	
 	comDataLCD(0x33,0);
 	delayMicroS(1520);
+	// delay(30000);
 	comDataLCD(0x32,0);
 	delayMicroS(1520);
+	// delay(30000);
 	
 	comDataLCD(0x28,0);	// Function Set
 	delayMicroS(37);
+	// delay(30000);
 	comDataLCD(0x0C,0);	// Display ON, Cursor OFF
 	delayMicroS(37);
+	// delay(800);
 	comDataLCD(0x06,0);	// Entry Mode SET, Increment Cursor Right
 	delayMicroS(37);
+	// delay(800);
 	comDataLCD(0x01,0);	// Clear Display
 	delayMicroS(1520);
+	// delay(10000);
 	
 	return;
 }
@@ -73,6 +82,7 @@ void writeLCD (int nibble, int type) {
 	
 	LPC_GPIO0->FIOSET = 1 << 28;
 	delayMicroS(25);
+	// delay(25);
 	LPC_GPIO0->FIOCLR = 1 << 28;
 	
 	return;
@@ -100,17 +110,14 @@ void displayLCD (char* message) {
 	return;
 }
 
-void initTimer () {
-	LPC_TIM0->CTCR = 0x00;
-  LPC_TIM0->TCR = 0x02;
-  LPC_TIM0->PR = 2;			// Prescaler for 1 us
-
-	return;
+void initTimer() {
+    LPC_TIM0->CTCR = 0x00;
+    LPC_TIM0->TCR = 0x02;
+    LPC_TIM0->PR = 2;
+    LPC_TIM0->TCR = 0x01;
 }
 
-void delayMicroS (int delay) {
-	LPC_TIM0->TCR = 0x03;
-	while (LPC_TIM0->TC < delay);
-	
-	return;
+void delayMicroS(int delay) {
+    LPC_TIM0->TC = 0;
+    while (LPC_TIM0->TC < delay);
 }
