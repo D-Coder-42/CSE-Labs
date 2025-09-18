@@ -26,4 +26,38 @@ static inline void display_board(shared_game* game) {
     printf("\n");
 }
 
+static inline void check_game_status(shared_game* game, int player) {
+    // Check rows and columns
+    for (int i = 0; i < SIZE; i++) {
+        if (game->board[i][0] == player && game->board[i][1] == player && game->board[i][2] == player) {
+            game->winner = player;
+            return;
+        }
+        if (game->board[0][i] == player && game->board[1][i] == player && game->board[2][i] == player) {
+            game->winner = player;
+            return;
+        }
+    }
+
+    // Check diagonals
+    if (game->board[0][0] == player && game->board[1][1] == player && game->board[2][2] == player) {
+        game->winner = player;
+        return;
+    }
+    if (game->board[0][2] == player && game->board[1][1] == player && game->board[2][0] == player) {
+        game->winner = player;
+        return;
+    }
+
+    // Check for draw
+    int full = 1;
+    for (int i = 0; i < SIZE; i++)
+        for (int j = 0; j < SIZE; j++)
+            if (game->board[i][j] == 0)
+                full = 0;
+
+    if (full)
+        game->winner = -1;
+}
+
 #endif
