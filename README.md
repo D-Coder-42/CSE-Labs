@@ -14,8 +14,8 @@ Welcome to the CSE Labs Repository! This repository contains lab manuals and cod
 ## Semester V
 
 - [**Computer Networks Lab**](/Semester%20V/CN%20Lab/)  
-  - **Softwares Used**: GNS3, Cisco Packet Tracer
+  - **Softwares Used**: GNS3, Cisco Packet Tracer, C
 - [**Operating Systems Lab**](/Semester%20V/OS%20Lab/)  
-  - **Languages Used**: Bash
+  - **Languages Used**: Bash, C
 
 Lab manuals and associated code are available in their respective folders for each lab.
