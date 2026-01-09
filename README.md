@@ -18,4 +18,13 @@ Welcome to the CSE Labs Repository! This repository contains lab manuals and cod
 - [**Operating Systems Lab**](/Semester%20V/OS%20Lab/)  
   - **Languages Used**: Bash, C
 
+## Semester VI
+
+-[**Parallel Programming Lab**](/Semester%20VI/PP%20Lab/)
+  - **Languages Used**: C, CUDA, OpenCL
+-[**Compiler Design Lab**](/Semester%20VI/CD%20Lab/)
+  - **Languages Used**: C
+-[**Web Programming Lab**](/Semester%20VI/WP%20Lab/)
+  - **Languages Used**: HTML, Python
+
 Lab manuals and associated code are available in their respective folders for each lab.

@@ -1,0 +1,51 @@
+6CSEC2@debian:~/Documents/230905252/Lab1$ mpicc ques/q1_pow_hello.c -o exe/q1 -lm
+6CSEC2@debian:~/Documents/230905252/Lab1$ mpicc ques/q2_calculator.c -o exe/q2
+6CSEC2@debian:~/Documents/230905252/Lab1$ mpicc ques/q3_toggle.c -o exe/q3
+6CSEC2@debian:~/Documents/230905252/Lab1$ mpicc ques/q4_factfib.c -o exe/q4
+6CSEC2@debian:~/Documents/230905252/Lab1$ mpicc ques/q5_reverse.c -o exe/q5
+6CSEC2@debian:~/Documents/230905252/Lab1$ mpicc ques/q6_prime.c -o exe/q6
+6CSEC2@debian:~/Documents/230905252/Lab1$ mpirun -n 6 exe/q1
+[1] 7 ^ 1 = 7
+[1] World
+[2] 7 ^ 2 = 49
+[2] Hello
+[3] 7 ^ 3 = 343
+[3] World
+[4] 7 ^ 4 = 2401
+[4] Hello
+[5] 7 ^ 5 = 16807
+[5] World
+[0] 7 ^ 0 = 1
+[0] Hello
+6CSEC2@debian:~/Documents/230905252/Lab1$ mpirun -n 5 exe/q2
+[1] Difference: 4
+[0] Sum: 10
+[3] Quotient: 2
+[4] Remainder: 1
+[2] Product: 21
+6CSEC2@debian:~/Documents/230905252/Lab1$ mpirun -n 5 exe/q3
+[3] HELlO
+[1] HeLLO
+[2] HElLO
+[4] HELLo
+[0] hELLO
+6CSEC2@debian:~/Documents/230905252/Lab1$ mpirun -n 6 exe/q4
+[2] Factorial of 2: 2
+[4] Factorial of 4: 24
+[1] Fibonacci number #1: 1
+[5] Fibonacci number #5: 5
+[3] Fibonacci number #3: 2
+[0] Factorial of 0: 1
+6CSEC2@debian:~/Documents/230905252/Lab1$ mpirun -n 9 exe/q5
+[3] 4321
+[5] 41
+[8] 8291
+[6] 801
+[7] 51
+[4] 2
+[2] 103
+[0] 81
+[1] 325
+6CSEC2@debian:~/Documents/230905252/Lab1$ mpirun -n 2 exe/q6
+[1] 53 59 61 67 71 73 79 83 89 97
+[0] 2 3 5 7 11 13 17 19 23 29 31 37 41 43 47
