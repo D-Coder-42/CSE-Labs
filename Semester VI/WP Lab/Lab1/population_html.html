@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <style>
+            table { border-collapse: collapse; width: 50%; text-align: center; font-family: sans-serif; }
+            th, td { border: 1px solid black; padding: 8px; }
+            
+            .header { background-color: #ff0000; color: black; font-weight: bold; }
+            .country-col { background-color: #ffebcc; }
+            .year-col { background-color: #b4c7e7; }
+            .pop-col { background-color: #c6e0b4; }
+        </style>
+    </head>
+    <body>
+
+        <h2>Population Table (HTML)</h2>
+        <table>
+            <tr class="header">
+                <th>Country</th>
+                <th colspan="2">Population (In Crores)</th>
+            </tr>
+            <tr>
+                <td rowspan="3" class="country-col">INDIA</td>
+                <td class="year-col">1998</td>
+                <td class="pop-col">85</td>
+            </tr>
+            <tr>
+                <td class="year-col">1999</td>
+                <td class="pop-col">90</td>
+            </tr>
+            <tr>
+                <td class="year-col">2000</td>
+                <td class="pop-col">100</td>
+            </tr>
+            <tr>
+                <td rowspan="3" class="country-col">USA</td>
+                <td class="year-col">1998</td>
+                <td class="pop-col">30</td>
+            </tr>
+            <tr>
+                <td class="year-col">1999</td>
+                <td class="pop-col">35</td>
+            </tr>
+            <tr>
+                <td class="year-col">2000</td>
+                <td class="pop-col">40</td>
+            </tr>
+            <tr>
+                <td rowspan="3" class="country-col">UK</td>
+                <td class="year-col">1998</td>
+                <td class="pop-col">25</td>
+            </tr>
+            <tr>
+                <td class="year-col">1999</td>
+                <td class="pop-col">30</td>
+            </tr>
+            <tr>
+                <td class="year-col">2000</td>
+                <td class="pop-col">35</td>
+            </tr>
+        </table>
+
+    </body>
+</html>

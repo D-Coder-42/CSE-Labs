@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Sliding Text on Image</title>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <style>
+            .container {
+                position: relative;
+                width: 500px;
+                overflow: hidden; 
+            }
+            img {
+                display: block;
+                width: 100%;
+            }
+            #slidingText {
+                position: absolute;
+                top: 40%;
+                left: -500px; 
+                background-color: rgba(0, 0, 0, 0.7);
+                color: white;
+                padding: 15px;
+                font-family: Arial, sans-serif;
+                font-size: 20px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="container">
+            <img src="assets/sample.jpeg" alt="Sample Image">
+            <div id="slidingText">Welcome to Manipal Institute of Technology</div>
+        </div>
+
+        <script>
+            $(document).ready(function() {
+                $("#slidingText").animate({ left: '50px' }, 2000);
+            });
+        </script>
+    </body>
+</html>

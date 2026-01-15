@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Bill Page</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <h1>Produce Bill</h1>
+
+  <!-- Dropdown list -->
+  <label for="brand">Choose a brand:</label>
+  <select id="brand">
+    <option value="HP">HP</option>
+    <option value="Nokia">Nokia</option>
+    <option value="Samsung">Samsung</option>
+    <option value="Motorola">Motorola</option>
+    <option value="Apple">Apple</option>
+  </select>
+  <br><br>
+
+
+  <label>
+    <input type="checkbox" id="mobile" value="Mobile"> Mobile
+    Quantity: <input type="number" id="mobileQty" value="0" min="0">
+  </label>
+  <br>
+  <label>
+    <input type="checkbox" id="laptop" value="Laptop"> Laptop
+    Quantity: <input type="number" id="laptopQty" value="0" min="0">
+  </label>
+  <br><br>
+
+
+  <button id="billBtn">Produce Bill</button>
+
+
+  <div id="output" style="margin-top:20px; font-weight:bold;"></div>
+
+  <script>
+    $(document).ready(function(){
+      // Dummy costs
+      const mobileCost = 20000;   // per mobile
+      const laptopCost = 50000;   // per laptop
+
+      $("#billBtn").click(function(){
+        let brand = $("#brand").val();
+
+        let items = [];
+        let total = 0;
+
+        if($("#mobile").is(":checked")){
+          let qty = parseInt($("#mobileQty").val()) || 0;
+          items.push("Mobile x " + qty + " (₹" + mobileCost + " each)");
+          total += qty * mobileCost;
+        }
+
+        if($("#laptop").is(":checked")){
+          let qty = parseInt($("#laptopQty").val()) || 0;
+          items.push("Laptop x " + qty + " (₹" + laptopCost + " each)");
+          total += qty * laptopCost;
+        }
+
+        let billText = "Brand: " + brand + "<br>" +
+                       "Items: " + (items.length ? items.join(", ") : "None") + "<br>" +
+                       "Total Amount: ₹" + total;
+
+        $("#output").html(billText);
+      });
+    });
+  </script>
+</body>
+</html>

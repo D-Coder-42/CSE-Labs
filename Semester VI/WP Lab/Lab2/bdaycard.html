@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Birthday Card Designer</title>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+            }
+            .container {
+                display: flex;
+                justify-content: space-between;
+            }
+            #controls {
+                width: 40%;
+                padding: 20px;
+                border: 1px solid #ccc;
+            }
+            #controls label {
+                display: block;
+                margin-top: 10px;
+            }
+            #controls select, 
+            #controls input[type="text"], 
+            #controls input[type="number"] {
+                width: 90%;
+                margin-top: 5px;
+                padding: 5px;
+            }
+            #card {
+                width: 50%;
+                min-height: 250px;
+                border: 2px solid purple;
+                background-color: #ffe4e1;
+                text-align: center;
+                padding: 20px;
+                font-family: Arial, sans-serif;
+                font-size: 18px;
+                color: darkblue;
+            }
+            #defaultImg {
+                display: none;
+                margin-top: 10px;
+                width: 100px;
+            }
+            #updateBtn {
+                margin-top: 15px;
+                padding: 8px 15px;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <h2 style="text-align:center;">Birthday Card Designer</h2>
+
+        <div class="container">
+            <div id="controls">
+                <label>Background Color:</label>
+                <select id="bgColor">
+                    <option value="#ffe4e1">Pink</option>
+                    <option value="lightyellow">Light Yellow</option>
+                    <option value="lightblue">Light Blue</option>
+                    <option value="white">White</option>
+                </select>
+
+                <label>Font:</label>
+                <select id="fontFamily">
+                    <option value="Arial">Arial</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Courier New">Courier New</option>
+                </select>
+
+                <label>Font Size (px):</label>
+                <input type="number" id="fontSize" value="18">
+
+                <label>Border Style:</label>
+                <select id="borderStyle">
+                    <option value="none">None</option>
+                    <option value="double">Double</option>
+                    <option value="solid">Solid</option>
+                </select>
+
+                <label><input type="checkbox" id="addPicture"> Add default picture</label>
+
+                <label>Greeting Text:</label>
+                <input type="text" id="greetingText" placeholder="Enter your greeting">
+
+                <button id="updateBtn">Update Card</button>
+            </div>
+
+            <div id="card">
+                <h3 id="greeting">Happy Birthday!</h3>
+                <img id="defaultImg" src="assets/cake.jpeg" style="width: 80%;" alt="Cake">
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function(){
+                $("#updateBtn").click(function(){
+                    $("#card").css("background-color", $("#bgColor").val());
+                    $("#card").css("font-family", $("#fontFamily").val());
+                    $("#card").css("font-size", $("#fontSize").val() + "px");
+                    $("#card").css("border-style", $("#borderStyle").val());
+                    if($("#addPicture").is(":checked")){
+                        $("#defaultImg").show();
+                    } else {
+                        $("#defaultImg").hide();
+                    }
+
+                    var text = $("#greetingText").val();
+                    if(text.trim() !== ""){
+                        $("#greeting").text(text);
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

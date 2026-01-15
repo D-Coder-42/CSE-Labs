@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+    <title>Produce Bill</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 20px; }
+        .item-row { margin-bottom: 10px; }
+        input[type="number"] { width: 60px; }
+    </style>
+    </head>
+    <body>
+
+    <h1>Produce Bill</h1>
+
+    <div class="item-row">
+        <label for="brand">Choose a brand:</label>
+        <select id="brand">
+            <option value="HP">HP</option>
+            <option value="Nokia">Nokia</option>
+            <option value="Samsung">Samsung</option>
+            <option value="Motorola">Motorola</option>
+            <option value="Apple">Apple</option>
+        </select>
+    </div>
+
+    <div class="item-row">
+        <input type="checkbox" id="chkMobile"> Mobile 
+        Qty: <input type="number" id="qtyMobile" value="0" min="0">
+    </div>
+
+    <div class="item-row">
+        <input type="checkbox" id="chkLaptop"> Laptop 
+        Qty: <input type="number" id="qtyLaptop" value="0" min="0">
+    </div>
+
+    <br>
+    <button id="btnProduce">Produce Bill</button>
+
+    <script>
+        $(document).ready(function(){
+        // Prices
+        const mobilePrice = 20000;
+        const laptopPrice = 50000;
+
+        $("#btnProduce").click(function(){
+            let total = 0;
+            let brand = $("#brand").val();
+
+            if($("#chkMobile").is(":checked")){
+            let mQty = parseInt($("#qtyMobile").val()) || 0;
+            total += mQty * mobilePrice;
+            }
+
+            if($("#chkLaptop").is(":checked")){
+            let lQty = parseInt($("#qtyLaptop").val()) || 0;
+            total += lQty * laptopPrice;
+            }
+
+            if(total > 0) {
+                alert("Bill Summary for " + brand + "\nTotal Amount: ₹" + total);
+            } else {
+                alert("Please select an item and enter quantity.");
+            }
+        });
+        });
+    </script>
+
+    </body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Table Animation</title>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $("#btnMove").click(function(){
+                    $("#container").animate({left: '10px'}, "slow");
+                });
+            });
+        </script>
+        <style>
+            table {
+                border-collapse: collapse;
+            }
+            td {
+                border: 1px solid black;
+                padding: 10px;
+            }
+            tr:nth-child(even) { background-color: #f2f2f2; }
+            tr:nth-child(odd) { background-color: #d9edf7; }
+
+            #container {
+                position: absolute;
+                left: calc(100% - 121px); 
+                width: fit-content;
+                text-align: center;
+            }
+
+            #btnMove {
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        </style>
+    </head>
+    <body>
+    <div id="container">
+        <table>
+            <tr><td>10</td><td>20</td><td>30</td></tr>
+            <tr><td>40</td><td>50</td><td>60</td></tr>
+            <tr><td>70</td><td>80</td><td>90</td></tr>
+        </table>
+        <img src="assets/sample.jpeg" width="111" style="padding-top: 10px;" />
+    </div>
+    
+    <button id="btnMove">Move Left</button>
+    </body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Simple Calculator</title>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                margin-top: 50px;
+            }
+            #display {
+                width: 220px;
+                height: 40px;
+                font-size: 18px;
+                text-align: right;
+                margin-bottom: 10px;
+                padding: 5px;
+            }
+            .btn {
+                width: 50px;
+                height: 40px;
+                margin: 5px;
+                font-size: 18px;
+                cursor: pointer;
+            }
+            .row {
+                margin-bottom: 5px;
+            }
+        </style>
+        <script>
+            $(document).ready(function(){
+                $(".btn").click(function(){
+                    var val = $(this).text();
+                    var display = $("#display");
+
+                    if(val === "C") {
+                        display.val("");
+                    } else if(val === "=") {
+                        try {
+                            display.val(eval(display.val()));
+                        } catch {
+                            display.val("Error");
+                        }
+                    } else {
+                        display.val(display.val() + val);
+                    }
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <h2>Simple Calculator</h2>
+        <input type="text" id="display" readonly>
+
+        <div class="row">
+            <button class="btn">7</button>
+            <button class="btn">8</button>
+            <button class="btn">9</button>
+            <button class="btn">/</button>
+        </div>
+        <div class="row">
+            <button class="btn">4</button>
+            <button class="btn">5</button>
+            <button class="btn">6</button>
+            <button class="btn">*</button>
+        </div>
+        <div class="row">
+            <button class="btn">1</button>
+            <button class="btn">2</button>
+            <button class="btn">3</button>
+            <button class="btn">-</button>
+        </div>
+        <div class="row">
+            <button class="btn">0</button>
+            <button class="btn">C</button>
+            <button class="btn">=</button>
+            <button class="btn">+</button>
+        </div>
+    </body>
+</html>

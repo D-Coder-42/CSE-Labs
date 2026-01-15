@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Population Table</title>
+    </head>
+    <body>
+
+        <h2>Population Table (JavaScript)</h2>
+
+        <script>
+            const data = [
+                { country: "INDIA", year: 1998, pop: 85 },
+                { country: "INDIA", year: 1999, pop: 90 },
+                { country: "INDIA", year: 2000, pop: 100 },
+                { country: "USA", year: 1998, pop: 30 },
+                { country: "USA", year: 1999, pop: 35 },
+                { country: "USA", year: 2000, pop: 40 },
+                { country: "UK", year: 1998, pop: 25 },
+                { country: "UK", year: 1999, pop: 30 },
+                { country: "UK", year: 2000, pop: 35 }
+            ];
+
+            let tableHTML = "<table border='1' cellspacing='0' cellpadding='10' style='text-align:center;'>";
+            tableHTML += "<tr bgcolor='red'><th>Country</th><th colspan='2'>Population (In Crores)</th></tr>";
+
+            data.forEach((item, index) => {
+                tableHTML += "<tr>";
+
+                if (index === 0 || data[index - 1].country !== item.country) {
+                    tableHTML += `<td rowspan="3" bgcolor="#FFEFCC">${item.country}</td>`;
+                }
+
+                tableHTML += `<td bgcolor="#B4C7E7">${item.year}</td>`;
+                tableHTML += `<td bgcolor="#C6E0B4">${item.pop}</td>`;
+                tableHTML += "</tr>";
+            });
+
+            tableHTML += "</table>";
+            document.write(tableHTML);
+        </script>
+
+    </body>
+</html>
