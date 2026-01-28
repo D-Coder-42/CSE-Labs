@@ -12,10 +12,10 @@ void alternateChars(char* part1, char* part2, char* combined, int M) {
 
 int main(int argc, char *argv[]) {
     int rank, size, M;
-    char *str1 = NULL, *str2 = NULL;
-    char *part1 = NULL, *part2 = NULL;
-    char *combined = NULL;
-    char *answer = NULL;
+    char *str1, *str2;
+    char *part1, *part2;
+    char *combined;
+    char *answer;
 
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
 
     part1 = (char*)malloc(M * sizeof(char));
     part2 = (char*)malloc(M * sizeof(char));
-    combined = (char*)malloc((M * 2) * sizeof(char));
+    combined = (char*)malloc(M * 2 * sizeof(char));
 
     MPI_Scatter(str1, M, MPI_CHAR, part1, M, MPI_CHAR, 0, MPI_COMM_WORLD);
     MPI_Scatter(str2, M, MPI_CHAR, part2, M, MPI_CHAR, 0, MPI_COMM_WORLD);
@@ -53,7 +53,8 @@ int main(int argc, char *argv[]) {
 
     if (rank == 0) {
         answer[M * size * 2] = '\0';
-        printf("\nAlternated Result: %s\n", answer);
+        fprintf(stdout, "[%d] Alternated Result: %s\n", rank, answer);
+        fflush(stdout);
 
         free(str1);
         free(str2);

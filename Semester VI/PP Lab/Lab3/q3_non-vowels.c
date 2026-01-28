@@ -60,13 +60,12 @@ int main (int argc, char** argv) {
         }
         fprintf(stdout, "[%d] Total non-vowel count is: %d\n", rank, total);
         fflush(stdout);
-    }
 
-    free(part);
-    if (rank == 0) {
         free(arr);
         free(countArr);
     }
+
+    free(part);
     MPI_Finalize();
     return 0;
 }

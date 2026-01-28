@@ -16,9 +16,9 @@ int main (int argc, char** argv) {
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
     if (rank == 0) {
+        fprintf(stdout, "Enter %d numbers: ", size);
+        fflush(stdout);
         for (int i = 0; i < size; i++) {
-            fprintf(stdout, "Enter number %d: ", i+1);
-            fflush(stdout);
             scanf("%d", &arr[i]);
         }
     }
