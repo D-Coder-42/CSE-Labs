@@ -1,17 +1,40 @@
-main()
-{
-int a,b,sum;
-a == 1;
-b = 1;
-sum = a + b;
+#include <stdio.h>
+#deifne MAX 100
+#define MIN 10
+
+/* This is a multi-line comment.
+   It should be ignored.
+   Keywords inside comments like int, main, if should be ignored.
+*/
+
+// Single line comment: ignoring char, else
+
+int main() {
+    char _var1 = 'c'; 
+    int integer = 20;
+
+    int x = 12345;
+    int sci1 = 1E10;
+    int sci2 = 2e+5;
+
+    printf("Hello World");
+    char* str2 = "String with \"escaped quotes\" inside";
+
+    if (a >= 10 && a <= 20) {
+        a = a + 1;
+        a = a - 1;
+    } else {
+        a = a * 2;
+        a = a / 2;
+    }
+
+    int check = (a == b) || (a != c);
+    int arr[5];
+    arr[0] = { 1 };
+    int bitwise = a & b; 
+    int bitwise_or = a | b;
+
+    return 0;
 }
 
-/*
-<main,1,1><(,1,5><),1,6>
-<{,2,1>
-<data-type,3,1><id,3,5><,,3,6><id,3,7><,,3,8><id,3,9><;,3,12>
-<id,4,1><=,4,3><num,4,5><;,4,6>
-<id,5,1><=,5,3><num,5,5><;,5,6>
-<id,6,1><=,6,5><id,6,7><+,6,9><id,6,11><;,6,12>
-<},7,1>
-*/
+#include <should_not_be_stripped.h>
