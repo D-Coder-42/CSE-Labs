@@ -1,0 +1,59 @@
+#include <stdio.h>
+#define LIMIT 100
+#define PI 3
+
+/* Testing the preprocessor skipping logic.
+   Also testing if the scanner ignores keywords in comments:
+   int char main if else
+*/
+
+// Single line comment test
+
+int add_10 (int val) {
+    int local_x;
+    local_x = val + 10;
+    return local_x;
+}
+
+int length (char str[16]) {
+    int len = 0;
+    while (str[len] != '\0') {
+        len = len + 1;
+    }
+    return len;
+}
+
+int main() {
+    int a, b, result[5];
+    char letter, my_string[32];
+
+    a = 100;
+    b = 20;
+
+    // Testing Relational Operators (relop) and dprime (else)
+    if (a >= b) {
+        a = a + 5;
+    } else {
+        a = a % 2;
+    }
+
+    // Testing Scientific Notation (handleNumber logic)
+    a = 1E5;
+    b = 2e-3;
+
+    // Testing identifier-list and arrays
+    result[0] = a * b / 2;
+    result[1] = a - b;
+
+    // Testing logical operators and pair handling (&&, ||, ==, !=)
+    if (a == b) {
+        letter = "S";
+    }
+
+    if (a != b) {
+        letter = "D";
+    }
+
+    // Checking function recognition logic
+    add_10(a);
+}

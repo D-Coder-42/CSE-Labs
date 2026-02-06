@@ -32,7 +32,7 @@ typedef struct {
 Bucket symTable[MAX_TOKENS];
 
 const char *keywords[] = {
-    "main", "if", "else", "int", "char", "return"
+    "main", "if", "else", "int", "char", "while", "return"
 };
 const int keyword_count = sizeof(keywords) / sizeof(keywords[0]);
 
@@ -164,7 +164,33 @@ Token handleID(FILE *fp, char c, int *row, int *col, char* dbuf) {
     } else {
         strcpy(t.token_name, "ID");
         if (search(buffer) == -1) {
-        	insert(buffer,dbuf,size(dbuf),"");
+            c = fgetc(fp);
+            while (isspace(c)) {
+                c = fgetc(fp);
+            }
+            if (c == '(') {
+                insert(buffer, "func", 0, dbuf);
+                dbuf[0] = '\0'; // reset dbuf after function is found
+            }
+            else if (c == '[') {
+                char temp[16];
+                int i = 0;
+                while (1) {
+                    c = fgetc(fp);
+                    if (isdigit(c)) {
+                        temp[i++] = c;
+                    } else if (c == ']') {
+                        break;
+                    }
+                }
+                temp[i] = '\0';
+                int arrSize = atoi(temp) * size(dbuf);
+                insert(buffer, dbuf, arrSize, "");
+            } else {
+                insert(buffer, dbuf, size(dbuf), "");
+            }
+
+            ungetc(c, fp);
 		}
 		t.index = search(buffer);
     }
@@ -319,7 +345,7 @@ Token getNextToken(FILE *fp, int *row, int *col, char* dbuf) {
 
 void displaySymTable() {
 	printf("\n\nSymbol Table:\n");
-	printf("\n\n%-6s %-25s %-10s %-6s %-12s\n", "Index", "Lexeme", "Type", "Size", "ReturnType");
+	printf("\n%-6s %-25s %-10s %-6s %-12s\n", "Index", "Lexeme", "Type", "Size", "ReturnType");
 	for (int i = 0; i < MAX_TOKENS; i++) {
 		if (symTable[i].count > 0) {
 			List *node = symTable[i].head;
@@ -334,9 +360,9 @@ void displaySymTable() {
 
 
 int main() {
-    FILE *fp = fopen("input.c", "r");
+    FILE *fp = fopen("test.input", "r");
     if (!fp) {
-        printf("Error: Cannot open input.c\n");
+        printf("Error: Cannot open test.input\n");
         return 0;
     }
 
