@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Magazine Cover Generator</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-title">Magazine Cover Designer</h1>
+        
+        <div class="layout">
+            <!-- Input Column -->
+            <form id="coverForm" class="form-section">
+                <div class="form-group">
+                    <label for="aspectRatio">Aspect Ratio (height/width):</label>
+                    <input type="number" id="aspectRatio" name="aspectRatio" value="1.5" step="0.1">
+                </div>
+
+                <div class="form-group">
+                    <label for="bgColor">Background Color:</label>
+                    <input type="color" id="bgColor" name="bgColor" value="#ffffff">
+                </div>
+
+                <div class="form-group">
+                    <label for="titleText">Title:</label>
+                    <input type="text" id="titleText" name="titleText" placeholder="Enter magazine title">
+                </div>
+
+                <div class="form-group">
+                    <label for="titleSize">Title Font Size (px):</label>
+                    <input type="number" id="titleSize" name="titleSize" value="36" min="16" max="72">
+                </div>
+
+                <div class="form-group">
+                    <label for="bodyText">Body Text:</label>
+                    <textarea id="bodyText" name="bodyText" rows="4" placeholder="Enter body text"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="bodySize">Body Font Size (px):</label>
+                    <input type="number" id="bodySize" name="bodySize" value="18" min="12" max="48">
+                </div>
+
+                <div class="form-group">
+                    <label for="fontColor">Font Color:</label>
+                    <input type="color" id="fontColor" name="fontColor" value="#000000">
+                </div>
+
+                <div class="form-group">
+                    <label for="fontFamily">Font Family:</label>
+                    <select id="fontFamily" name="fontFamily">
+                        <option value="Arial">Arial</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Verdana">Verdana</option>
+                        <option value="Courier New">Courier New</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Upload Cover Image:</label>
+                    <input type="file" id="image" name="image" accept="image/*">
+                </div>
+
+                <button type="button" class="btn" onclick="generateCover()">Update Preview</button>
+            </form>
+
+            <!-- Preview Column -->
+            <div id="coverPreview" class="cover">
+                <img id="coverImage" alt="Cover Image" style="display:none;">
+                <div class="cover-content">
+                    <h1 id="coverTitle" class="cover-title"></h1>
+                    <p id="coverBody" class="cover-body"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateCover() {
+            const aspectRatio = parseFloat(document.getElementById("aspectRatio").value);
+            const bgColor = document.getElementById("bgColor").value;
+            const titleText = document.getElementById("titleText").value;
+            const bodyText = document.getElementById("bodyText").value;
+            const titleSize = document.getElementById("titleSize").value + "px";
+            const bodySize = document.getElementById("bodySize").value + "px";
+            const fontColor = document.getElementById("fontColor").value;
+            const fontFamily = document.getElementById("fontFamily").value;
+            const imageInput = document.getElementById("image");
+
+            const cover = document.getElementById("coverPreview");
+            const coverTitle = document.getElementById("coverTitle");
+            const coverBody = document.getElementById("coverBody");
+            const coverImage = document.getElementById("coverImage");
+
+            // Responsive width: take container width
+            const coverWidth = cover.parentElement.offsetWidth / 2; 
+            cover.style.width = coverWidth + "px";
+            cover.style.height = (coverWidth * aspectRatio) + "px";
+
+            // Apply styles
+            cover.style.backgroundColor = bgColor;
+            coverTitle.textContent = titleText;
+            coverBody.textContent = bodyText;
+            coverTitle.style.fontSize = titleSize;
+            coverBody.style.fontSize = bodySize;
+            coverTitle.style.color = fontColor;
+            coverBody.style.color = fontColor;
+            coverTitle.style.fontFamily = fontFamily;
+            coverBody.style.fontFamily = fontFamily;
+
+            // Handle image
+            if (imageInput.files && imageInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    coverImage.src = e.target.result;
+                    coverImage.style.display = "block";
+                }
+                reader.readAsDataURL(imageInput.files[0]);
+            }
+        }
+    </script>
+</body>
+</html>
