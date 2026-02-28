@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Submission Received</h2>
+    <p><strong>Selected Manufacturer:</strong> {{ make }}</p>
+    <p><strong>Model Name Provided:</strong> {{ model }}</p>
+    <hr>
+    <a href="{% url 'car_input' %}">Go back to form</a>
+{% endblock %}

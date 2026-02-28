@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>First Page - Input</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; background-color: #f8f9fa; }
+        .form-card { 
+            background: white; 
+            padding: 25px; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+            max-width: 400px;
+        }
+        form p { margin-bottom: 15px; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { background-color: #28a745; color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="form-card">
+        <h2>Enter Student Data</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Submit to Session</button>
+        </form>
+    </div>
+</body>
+</html>

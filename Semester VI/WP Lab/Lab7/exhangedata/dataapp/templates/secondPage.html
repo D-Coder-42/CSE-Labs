@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Second Page - Result</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; }
+        .label-box { 
+            border: 2px dashed #007bff; 
+            padding: 20px; 
+            display: inline-block; 
+            background-color: #e7f3ff;
+            margin-bottom: 20px;
+        }
+        button { padding: 10px 20px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>Data from Session</h2>
+
+    <div class="label-box">
+        <label>
+            <strong>{{ request.session.name }}</strong>, Roll No: <strong>{{ request.session.roll_no }}</strong> <br>
+            is enrolled in <strong>{{ request.session.subject }}</strong>.
+        </label>
+    </div>
+
+    <br>
+
+    <a href="{% url 'details_input' %}">
+        <button type="button">Return to First Page</button>
+    </a>
+</body>
+</html>
