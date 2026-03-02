@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Grocery Checklist</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        /* Table styling to meet the border width and style requirements */
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border-style: solid;
+            border-width: 3px; /* Setting the border width */
+            border-color: #333;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .submit-btn {
+            margin-top: 15px;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Grocery Checklist Generation</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="submit-btn">Add Item</button>
+    </form>
+
+    <hr style="margin-top: 30px;">
+
+    {% if selected_items_data %}
+        <h3>Selected Items and Prices</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Price ($)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in selected_items_data %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.price|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <th><strong>Total</strong></th>
+                    <th><strong>{{ total_price|floatformat:2 }}</strong></th>
+                </tr>
+            </tbody>
+        </table>
+    {% endif %}
+
+</body>
+</html>
