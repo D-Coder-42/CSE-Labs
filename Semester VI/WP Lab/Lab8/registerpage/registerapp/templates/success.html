@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Success Page</title>
+</head>
+<body>
+    <h2>Welcome {{ username }}</h2>
+    {% if email %}
+        <p>Email: {{ email }}</p>
+    {% endif %}
+    {% if contact_number %}
+        <p>Contact Number: {{ contact_number }}</p>
+    {% endif %}
+</body>
+</html>

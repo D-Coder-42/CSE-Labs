@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CGPA Result</title>
+</head>
+<body>
+    <h2>Result</h2>
+    {% if name and cgpa %}
+        <p>Name: {{ name }}</p>
+        <p>CGPA: {{ cgpa }}</p>
+    {% else %}
+        <p>No data available. Please go back and enter details.</p>
+    {% endif %}
+    <a href="{% url 'page1' %}">Back</a>
+</body>
+</html>

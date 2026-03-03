@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vote for Book Review</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 40%;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h2>How is the book "ASP.NET with C# by Vipul Prakashan"?</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>Option</th>
+                <th>Percentage</th>
+            </tr>
+            <tr>
+                <td><input type="radio" name="choice" value="Good"> Good</td>
+                <td>
+                    {% if total > 0 %}
+                        {{ percentages.Good }}%
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td><input type="radio" name="choice" value="Satisfactory"> Satisfactory</td>
+                <td>
+                    {% if total > 0 %}
+                        {{ percentages.Satisfactory }}%
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td><input type="radio" name="choice" value="Bad"> Bad</td>
+                <td>
+                    {% if total > 0 %}
+                        {{ percentages.Bad }}%
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+        <br>
+        <button type="submit">Vote</button>
+    </form>
+
+    {% if total > 0 %}
+        <p>Total Votes: {{ total }}</p>
+    {% endif %}
+</body>
+</html>
