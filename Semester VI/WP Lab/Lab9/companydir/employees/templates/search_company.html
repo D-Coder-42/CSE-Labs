@@ -1,0 +1,15 @@
+<h1>Search Employees by Company</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Search</button>
+</form>
+
+{% if people %}
+    <h2>Employees at {{ company }}</h2>
+    <ul>
+    {% for person, city in people %}
+        <li>{{ person }} — {{ city }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}

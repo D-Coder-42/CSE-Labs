@@ -1,0 +1,17 @@
+<h1>{{ category.name }}</h1>
+<p>Visits: {{ category.visits }} | Likes: {{ category.likes }}</p>
+<a href="{% url 'like_category' category.id %}">Like this category</a>
+<hr>
+
+<h2>Add a Page</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Page</button>
+</form>
+<hr>
+
+{% for page in pages %}
+    <h3><a href="{% url 'view_page' page.id %}">{{ page.title }}</a></h3>
+    <p>Views: {{ page.views }}</p>
+{% endfor %}

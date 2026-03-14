@@ -1,0 +1,11 @@
+<h1>Website Directory</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Category</button>
+</form>
+<hr>
+{% for category in categories %}
+    <h2><a href="{% url 'category_detail' category.id %}">{{ category.name }}</a></h2>
+    <p>Visits: {{ category.visits }} | Likes: {{ category.likes }}</p>
+{% endfor %}
