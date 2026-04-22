@@ -22,9 +22,9 @@ Welcome to the CSE Labs Repository! This repository contains lab manuals and cod
 
 - [**Parallel Programming Lab**](/Semester%20VI/PP%20Lab/)
   - **Languages Used**: C, C++
-  - **Frameworks Used**: MPICH, CUDA, OpenCL
+  - **Frameworks Used**: MPICH, CUDA
 - [**Compiler Design Lab**](/Semester%20VI/CD%20Lab/)
-  - **Languages Used**: C, Flex
+  - **Languages Used**: C, Flex, Bison
 - [**Web Programming Lab**](/Semester%20VI/WP%20Lab/)
   - **Languages Used**: HTML, CSS, Python
   - **Framworks/Libraries Used**: jQuery, Bootstrap, Django
