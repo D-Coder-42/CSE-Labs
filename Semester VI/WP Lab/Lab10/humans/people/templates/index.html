@@ -1,0 +1,25 @@
+<h2>Human Records</h2>
+
+<form method="post">
+  {% csrf_token %}
+  <label for="human_id">Select First Name:</label>
+  <select name="human_id">
+    {% for human in humans %}
+      <option value="{{ human.id }}"
+        {% if selected_human and human.id == selected_human.id %}selected{% endif %}>
+        {{ human.first_name }}
+      </option>
+    {% endfor %}
+  </select>
+  <button type="submit" name="select">Select</button>
+</form>
+
+{% if form %}
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="human_id" value="{{ selected_human.id }}">
+    {{ form.as_p }}
+    <button type="submit" name="update">Update</button>
+    <button type="submit" name="delete">Delete</button>
+  </form>
+{% endif %}

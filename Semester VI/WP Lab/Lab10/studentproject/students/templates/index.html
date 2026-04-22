@@ -1,0 +1,14 @@
+<h2>Student List</h2>
+<ul>
+  {% for student in students %}
+    <li>
+      <strong>ID:</strong> {{ student.student_id }} |
+      <strong>Name:</strong> {{ student.student_name }} |
+      <strong>Course:</strong> {{ student.course_name }} |
+      <strong>DOB:</strong> {{ student.date_of_birth }}
+    </li>
+  {% empty %}
+    <li>No students available.</li>
+  {% endfor %}
+</ul>
+<a href="{% url 'add_student' %}">Add New Student</a>
